@@ -8,7 +8,7 @@ import { prisma }         from './infrastructure/database/prisma.client.js'
 import { logger }         from './infrastructure/logger/logger.js'
 import { startDemoCron }  from './services/demo-cron.service.js'
 
-const PORT = parseInt(process.env['API_PORT'] ?? '4000', 10)
+const PORT = parseInt(process.env['PORT'] ?? process.env['API_PORT'] ?? '4000', 10)
 
 async function main() {
   const app    = createApp()
