@@ -1,34 +1,49 @@
 'use client'
 
-import { useRef, useEffect, useState } from 'react'
+import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { ArrowRight, TrendingUp } from 'lucide-react'
 import Link from 'next/link'
-import { FEATURED_PRODUCTS } from '@/data/homeData'
 import ProductCard from '@/components/ui/ProductCard'
 import { SkeletonRow } from '@/components/ui/SkeletonCard'
 import { useStats } from '@/lib/hooks/use-stats'
+import { useProductSearch, type ProductSummary } from '@/lib/hooks/use-products'
+import type { Product } from '@/data/homeData'
+
+function toCardProduct(p: ProductSummary, i: number): Product {
+  return {
+    id:             i,
+    name:           p.name,
+    category:       '',
+    pricePerDay:    p.pricePerDay,
+    deposit:        p.depositAmount,
+    rating:         p.averageRating,
+    reviews:        p.reviewCount,
+    location:       `${p.district}, ${p.division}`,
+    vendor:         p.vendorName,
+    vendorVerified: true,
+    badge:          p.averageRating >= 4.8 ? 'Top Pick' : p.totalRentals >= 50 ? 'Most Loved' : null,
+    emoji:          '📦',
+    image:          p.media[0]?.url ?? '',
+  }
+}
+
+const containerVariants = {
+  hidden:  {},
+  visible: { transition: { staggerChildren: 0.08 } },
+}
+const cardVariants = {
+  hidden:  { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } },
+}
 
 export default function FeaturedRentals() {
-  const ref      = useRef(null as HTMLElement | null)
-  const inView   = useInView(ref, { once: true, margin: '-80px' })
-  const [loaded, setLoaded] = useState(false)
-  const stats    = useStats()
+  const ref    = useRef(null as HTMLElement | null)
+  const inView = useInView(ref, { once: true, margin: '-80px' })
+  const stats  = useStats()
 
-  useEffect(() => {
-    if (!inView) return
-    const t = setTimeout(() => setLoaded(true), 1200)
-    return () => clearTimeout(t)
-  }, [inView])
-
-  const containerVariants = {
-    hidden:  {},
-    visible: { transition: { staggerChildren: 0.08 } },
-  }
-  const cardVariants = {
-    hidden:  { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } },
-  }
+  const { data: searchResult, isLoading } = useProductSearch({ limit: 4 })
+  const products = (searchResult?.items ?? []).map(toCardProduct)
 
   return (
     <section
@@ -52,7 +67,6 @@ export default function FeaturedRentals() {
           </div>
 
           <div className="flex items-center gap-3 flex-shrink-0">
-            {/* Social proof counter — real count from API */}
             <span className="flex items-center gap-1.5 text-xs font-medium
                              px-3 py-1.5 rounded-full
                              bg-copper/8 text-copper border border-copper/15"
@@ -77,7 +91,7 @@ export default function FeaturedRentals() {
         </div>
 
         {/* Grid */}
-        {!loaded ? (
+        {isLoading || products.length === 0 ? (
           <div aria-label="Loading products…" aria-busy="true">
             <SkeletonRow count={4} />
           </div>
@@ -85,20 +99,20 @@ export default function FeaturedRentals() {
           <motion.ul
             variants={containerVariants}
             initial="hidden"
-            animate="visible"
+            animate={inView ? 'visible' : 'hidden'}
             className="grid grid-cols-1 sm:grid-cols-2 gap-5 max-w-2xl"
             role="list"
             aria-label="Featured rental items"
           >
-            {FEATURED_PRODUCTS.map((product) => (
+            {products.map((product, i) => (
               <motion.li key={product.id} variants={cardVariants} role="listitem">
-                <ProductCard product={product} />
+                <ProductCard product={product} priority={i === 0} />
               </motion.li>
             ))}
           </motion.ul>
         )}
 
-        {/* Browse all CTA — sticky at bottom on mobile */}
+        {/* Browse all CTA */}
         <div className="mt-10 text-center">
           <Link href="/products" className="btn-secondary inline-flex">
             Browse all items
