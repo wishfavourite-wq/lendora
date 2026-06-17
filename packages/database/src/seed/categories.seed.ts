@@ -101,8 +101,24 @@ export const CATEGORIES = [
   },
 ] as const
 
+const FEATURED_CATEGORIES = [
+  { slug: 'power-tools',        name: 'Power Tools',            emoji: '⚡', sortOrder: 101 },
+  { slug: 'event-equipment',    name: 'Event Equipment',        emoji: '🎪', sortOrder: 102 },
+  { slug: 'baby-products',      name: 'Baby Products',          emoji: '👶', sortOrder: 103 },
+  { slug: 'camping-travel-gear',name: 'Camping & Travel Gear',  emoji: '🏕️', sortOrder: 104 },
+] as const
+
 export async function seedCategories(db: PrismaClient): Promise<void> {
   console.log('  Seeding categories...')
+
+  // Ensure the 4 featured home-page categories always exist as root categories
+  for (const cat of FEATURED_CATEGORIES) {
+    await db.category.upsert({
+      where:  { slug: cat.slug },
+      update: {},
+      create: { name: cat.name, slug: cat.slug, emoji: cat.emoji, sortOrder: cat.sortOrder, isActive: true },
+    })
+  }
 
   for (const parent of CATEGORIES) {
     const parentRow = await db.category.upsert({
