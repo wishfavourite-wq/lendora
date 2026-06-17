@@ -5,6 +5,6 @@ buildCommand = "npm install -g pnpm@9.15.0 --force && pnpm install --frozen-lock
 [deploy]
 startCommand = "node apps/api/dist/main.js"
 healthcheckPath = "/health"
-healthcheckTimeout = 60
+healthcheckTimeout = 300
 restartPolicyType = "ON_FAILURE"
 restartPolicyMaxRetries = 3
