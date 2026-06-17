@@ -100,7 +100,7 @@ export default function FeaturedRentals() {
             variants={containerVariants}
             initial="hidden"
             animate={inView ? 'visible' : 'hidden'}
-            className="grid grid-cols-1 sm:grid-cols-2 gap-5 max-w-2xl"
+            className="grid grid-cols-2 lg:grid-cols-4 gap-5"
             role="list"
             aria-label="Featured rental items"
           >
