@@ -147,6 +147,7 @@ git push -u origin main
 5. You will see `MYSQL_URL` — click the copy icon. It looks like:
    ```
    mysql://root:PASSWORD@monorail.proxy.rlwy.net:PORT/railway
+   mysql:/root:cRongrxQqrHfVNwVhoQIjWCvhEXnkHQe@mysql.railway.internal:3306/railway
    ```
 6. **Write this down** — this is your `DATABASE_URL`
 
