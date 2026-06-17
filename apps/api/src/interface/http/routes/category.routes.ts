@@ -37,7 +37,7 @@ categoryRouter.get('/', async (req: Request, res: Response, next: NextFunction) 
 
     // Default: flat list with root categories + subcategories (cached)
     const c   = getContainer()
-    const key = 'categories:flat:v6'
+    const key = 'categories:flat:v8'
     const cached = await c.cache.get<object>(key)
     if (cached) { res.json({ success: true, data: cached }); return }
 
