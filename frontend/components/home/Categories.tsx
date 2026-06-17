@@ -30,7 +30,7 @@ export default function Categories() {
   const isInView = useInView(ref, { once: true, margin: '-80px' })
   const { data: categories = [] } = useCategories()
 
-  const FEATURED_SLUGS = ['power-tools', 'event-equipment', 'baby-products', 'camping-travel-gear']
+  const FEATURED_SLUGS = ['cameras-photography', 'event-party', 'electronics', 'construction-tools']
   const rootCategories = FEATURED_SLUGS
     .map((slug) => categories.find((c) => c.slug === slug))
     .filter((c): c is NonNullable<typeof c> => c !== undefined)
