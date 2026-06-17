@@ -1,6 +1,6 @@
 [build]
 builder = "NIXPACKS"
-buildCommand = "npm install -g pnpm@9.15.0 --force && pnpm install --frozen-lockfile && pnpm --filter @lendora/database run db:generate && pnpm --filter @lendora/shared run build && (pnpm --filter @lendora/api run build || true)"
+buildCommand = "npm install -g pnpm@9.15.0 --force && pnpm install --frozen-lockfile && pnpm --filter @lendora/database run db:generate && pnpm --filter @lendora/shared run build && pnpm --filter @lendora/api run build"
 
 [deploy]
 startCommand = "node apps/api/dist/main.js"

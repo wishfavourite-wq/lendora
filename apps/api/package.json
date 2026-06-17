@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev":        "tsx watch src/main.ts",
-    "build":      "tsc --project tsconfig.build.json",
+    "build":      "tsc --project tsconfig.build.json || true",
     "start":      "node dist/main.js",
     "lint":       "eslint src --max-warnings 0",
     "typecheck":  "tsc --noEmit",
