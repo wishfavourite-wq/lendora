@@ -13,11 +13,12 @@
 
   html {
     scroll-behavior: smooth;
-    min-width: 320px;
+    overflow-x: hidden;
   }
 
   body {
     overflow-x: hidden;
+    min-width: 320px;
   }
 
   /* Skip-to-content — visible on focus, hidden otherwise */

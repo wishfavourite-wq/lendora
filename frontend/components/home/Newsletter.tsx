@@ -53,7 +53,7 @@ export default function Newsletter() {
       {/* Copper glow */}
       <div
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
-                   w-[500px] h-[300px] rounded-full bg-copper/15 blur-3xl pointer-events-none"
+                   w-full max-w-[500px] h-[300px] rounded-full bg-copper/15 blur-3xl pointer-events-none"
         aria-hidden="true"
       />
 
