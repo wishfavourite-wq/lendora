@@ -1,0 +1,61 @@
+services:
+  - type: web
+    name: lendora-api
+    runtime: node
+    region: singapore          # closest to Bangladesh
+    plan: starter              # $7/month — cheapest paid tier
+    rootDir: .
+    buildCommand: >-
+      npm install -g pnpm@9.15.0 &&
+      pnpm install --frozen-lockfile &&
+      pnpm --filter @lendora/database run db:generate &&
+      pnpm --filter @lendora/shared   run build &&
+      pnpm --filter @lendora/api      run build
+    startCommand: node apps/api/dist/main.js
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: API_PORT
+        value: 4000
+      # ── Set these in the Render dashboard (keep secrets out of git) ──────────
+      - key: DATABASE_URL
+        sync: false            # set manually in Render dashboard
+      - key: DATABASE_DIRECT_URL
+        sync: false
+      - key: APP_URL
+        sync: false            # your Vercel URL, e.g. https://lendora.vercel.app
+      - key: SERVER_URL
+        sync: false            # this Render service URL, e.g. https://lendora-api.onrender.com
+      - key: FRONTEND_URL
+        sync: false            # same as APP_URL
+      - key: JWT_ACCESS_SECRET
+        sync: false
+      - key: JWT_REFRESH_SECRET
+        sync: false
+      - key: COOKIE_SECRET
+        sync: false
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+      # ── Optional (email) ─────────────────────────────────────────────────────
+      - key: SMTP_HOST
+        value: smtp.gmail.com
+      - key: SMTP_PORT
+        value: 587
+      - key: SMTP_USER
+        sync: false
+      - key: SMTP_PASS
+        sync: false
+      - key: SMTP_FROM
+        sync: false
+      # ── Safe defaults ────────────────────────────────────────────────────────
+      - key: LOG_LEVEL
+        value: info
+      - key: RATE_LIMIT_WINDOW_MS
+        value: 60000
+      - key: RATE_LIMIT_MAX_REQUESTS
+        value: 200

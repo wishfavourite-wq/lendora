@@ -1,0 +1,1239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Lendora — Complete Technical Guide</title>
+<style>
+  /* ── Reset & base ─────────────────────────────── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 13px; }
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    color: #1a1a2e;
+    background: #fff;
+    line-height: 1.65;
+    padding: 0 32px 48px;
+    max-width: 960px;
+    margin: 0 auto;
+  }
+
+  /* ── Print ────────────────────────────────────── */
+  @media print {
+    body { padding: 0; font-size: 11px; }
+    .no-print { display: none; }
+    h1, h2, h3 { page-break-after: avoid; }
+    table { page-break-inside: avoid; }
+    .page-break { page-break-before: always; }
+  }
+
+  /* ── Cover ────────────────────────────────────── */
+  .cover {
+    background: linear-gradient(135deg, #0A3D2E 0%, #1A6B50 50%, #C87941 100%);
+    color: #fff;
+    padding: 64px 48px;
+    margin: 0 -32px 48px;
+    border-radius: 0 0 24px 24px;
+  }
+  .cover-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.18);
+    border: 1px solid rgba(255,255,255,0.35);
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .cover h1 {
+    font-size: 3rem;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.1;
+    margin-bottom: 12px;
+  }
+  .cover-sub {
+    font-size: 1.15rem;
+    opacity: 0.85;
+    margin-bottom: 32px;
+  }
+  .cover-meta {
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+    font-size: 0.88rem;
+    opacity: 0.75;
+  }
+  .cover-meta span::before { margin-right: 6px; }
+
+  /* ── TOC ──────────────────────────────────────── */
+  .toc {
+    background: #f7f8fc;
+    border: 1px solid #e2e6f0;
+    border-radius: 12px;
+    padding: 28px 32px;
+    margin-bottom: 48px;
+  }
+  .toc h2 { font-size: 1rem; color: #0A3D2E; margin-bottom: 14px; text-transform: uppercase; letter-spacing: .8px; }
+  .toc ol { padding-left: 20px; }
+  .toc li { margin: 5px 0; }
+  .toc a { color: #C87941; text-decoration: none; font-size: 0.9rem; }
+  .toc a:hover { text-decoration: underline; }
+
+  /* ── Headings ─────────────────────────────────── */
+  h1 { font-size: 2rem; color: #0A3D2E; border-bottom: 3px solid #C87941; padding-bottom: 10px; margin: 48px 0 20px; }
+  h2 { font-size: 1.4rem; color: #0A3D2E; margin: 36px 0 14px; border-left: 4px solid #C87941; padding-left: 12px; }
+  h3 { font-size: 1.1rem; color: #1A6B50; margin: 24px 0 10px; }
+  h4 { font-size: 0.95rem; color: #333; margin: 16px 0 8px; font-weight: 700; }
+
+  /* ── Paragraph & list ─────────────────────────── */
+  p { margin-bottom: 10px; }
+  ul, ol { margin: 8px 0 12px 22px; }
+  li { margin: 4px 0; }
+
+  /* ── Code ─────────────────────────────────────── */
+  code {
+    background: #f3f4f8;
+    border: 1px solid #dde0ea;
+    border-radius: 4px;
+    padding: 1px 6px;
+    font-family: 'Cascadia Code', 'Fira Code', 'Courier New', monospace;
+    font-size: 0.82rem;
+    color: #1A6B50;
+  }
+  pre {
+    background: #1a1a2e;
+    color: #e2e6f0;
+    padding: 16px 20px;
+    border-radius: 10px;
+    overflow-x: auto;
+    margin: 12px 0;
+    font-size: 0.8rem;
+    line-height: 1.6;
+  }
+  pre code { background: none; border: none; color: inherit; padding: 0; font-size: inherit; }
+
+  /* ── Tables ───────────────────────────────────── */
+  .table-wrap { overflow-x: auto; margin: 14px 0 24px; border-radius: 10px; border: 1px solid #e2e6f0; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  thead tr { background: #0A3D2E; color: #fff; }
+  th { padding: 10px 14px; text-align: left; font-weight: 600; white-space: nowrap; }
+  td { padding: 9px 14px; border-bottom: 1px solid #edf0f7; vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  tr:nth-child(even) td { background: #f9fbff; }
+
+  /* ── Badges ───────────────────────────────────── */
+  .badge {
+    display: inline-block;
+    padding: 2px 9px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  .badge-green  { background: #dcfce7; color: #14532d; }
+  .badge-blue   { background: #dbeafe; color: #1e3a8a; }
+  .badge-orange { background: #fed7aa; color: #7c2d12; }
+  .badge-purple { background: #ede9fe; color: #4c1d95; }
+  .badge-red    { background: #fee2e2; color: #7f1d1d; }
+  .badge-gray   { background: #f3f4f6; color: #374151; }
+
+  /* ── Info boxes ───────────────────────────────── */
+  .info-box {
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin: 14px 0;
+    border-left: 4px solid;
+    font-size: 0.88rem;
+  }
+  .info-box.green  { background: #f0fdf4; border-color: #1A6B50; }
+  .info-box.orange { background: #fff7ed; border-color: #C87941; }
+  .info-box.blue   { background: #eff6ff; border-color: #3b82f6; }
+  .info-box.purple { background: #f5f3ff; border-color: #7c3aed; }
+
+  /* ── Flow chart ───────────────────────────────── */
+  .flow {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    margin: 14px 0;
+  }
+  .flow-step {
+    background: #0A3D2E;
+    color: #fff;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .flow-arrow {
+    color: #C87941;
+    font-weight: 700;
+    font-size: 1.1rem;
+  }
+
+  /* ── Folder tree ──────────────────────────────── */
+  .tree {
+    background: #f7f8fc;
+    border: 1px solid #e2e6f0;
+    border-radius: 10px;
+    padding: 16px 20px;
+    font-family: 'Cascadia Code', 'Fira Code', monospace;
+    font-size: 0.8rem;
+    line-height: 1.9;
+    margin: 12px 0;
+  }
+  .tree .folder { color: #0A3D2E; font-weight: 700; }
+  .tree .file   { color: #444; }
+  .tree .note   { color: #888; font-style: italic; }
+
+  /* ── Two-col grid ─────────────────────────────── */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 12px 0; }
+  @media (max-width: 640px) { .grid-2 { grid-template-columns: 1fr; } }
+  .card {
+    background: #f7f8fc;
+    border: 1px solid #e2e6f0;
+    border-radius: 10px;
+    padding: 14px 16px;
+  }
+  .card h4 { margin-top: 0; color: #0A3D2E; }
+
+  /* ── Section divider ──────────────────────────── */
+  .divider {
+    border: none;
+    border-top: 2px dashed #e2e6f0;
+    margin: 40px 0;
+  }
+
+  /* ── Tech pill ────────────────────────────────── */
+  .pill {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin: 2px;
+    background: #e5e7eb;
+    color: #374151;
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════
+     COVER
+══════════════════════════════════════════════════ -->
+<div class="cover">
+  <div class="cover-badge">Technical Documentation</div>
+  <h1>Lendora</h1>
+  <p class="cover-sub">Complete Technical Guide — Architecture, Tools, Features &amp; Folder Structure</p>
+  <div class="cover-meta">
+    <span>🇧🇩 Bangladesh Rental Marketplace</span>
+    <span>📦 Multi-Vendor Platform</span>
+    <span>⚙️ Next.js 15 + Express + Prisma + MySQL</span>
+    <span>📅 2026</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     TABLE OF CONTENTS
+══════════════════════════════════════════════════ -->
+<div class="toc">
+  <h2>Table of Contents</h2>
+  <ol>
+    <li><a href="#s1">What Is Lendora?</a></li>
+    <li><a href="#s2">Full Technology Stack</a></li>
+    <li><a href="#s3">Project Folder Structure — Every Folder Explained</a></li>
+    <li><a href="#s4">Frontend: Pages, Sections &amp; Which Tools Build Them</a></li>
+    <li><a href="#s5">Backend: All API Endpoints</a></li>
+    <li><a href="#s6">Database: All Tables &amp; Relationships</a></li>
+    <li><a href="#s7">Rental Lifecycle Flow</a></li>
+    <li><a href="#s8">Payment, Deposit &amp; Commission — How They Work</a></li>
+    <li><a href="#s9">User Roles &amp; Permissions</a></li>
+    <li><a href="#s10">Notification System</a></li>
+    <li><a href="#s11">File Upload &amp; Image System</a></li>
+    <li><a href="#s12">Authentication &amp; Security</a></li>
+    <li><a href="#s13">Admin Panel — Full Feature Map</a></li>
+    <li><a href="#s14">Vendor Dashboard — Full Feature Map</a></li>
+    <li><a href="#s15">Customer Dashboard — Full Feature Map</a></li>
+    <li><a href="#s16">How Every Calculation Works</a></li>
+    <li><a href="#s17">Environment Variables Reference</a></li>
+  </ol>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════
+     SECTION 1 — WHAT IS LENDORA
+══════════════════════════════════════════════════ -->
+<h1 id="s1">1. What Is Lendora?</h1>
+
+<p>Lendora is a <strong>multi-vendor peer-to-peer rental marketplace</strong> built for Bangladesh. It lets verified sellers (vendors) list items for rent — cameras, tools, baby equipment, event gear — and verified customers (renters) book them with deposit, payment, and return tracking built in.</p>
+
+<div class="grid-2">
+  <div class="card">
+    <h4>Platform Type</h4>
+    <p>Multi-vendor rental marketplace (like Airbnb but for physical goods)</p>
+  </div>
+  <div class="card">
+    <h4>Target Market</h4>
+    <p>Bangladesh — primarily Dhaka, with national coverage planned</p>
+  </div>
+  <div class="card">
+    <h4>Three User Types</h4>
+    <ul>
+      <li><strong>Customer</strong> — browses &amp; rents</li>
+      <li><strong>Vendor</strong> — lists &amp; manages items</li>
+      <li><strong>Admin</strong> — platform oversight</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Revenue Model</h4>
+    <p>Platform takes <strong>10% commission</strong> on each completed rental. Vendor receives 90% as payout.</p>
+  </div>
+</div>
+
+<div class="info-box green">
+  <strong>Key Differentiators:</strong> Identity-verified vendors and renters (NID upload), deposit hold system, damage claim resolution, bKash &amp; Nagad payment integration, real-time rental tracking through 10 status stages.
+</div>
+
+
+<!-- ═══════════════════════════════════════════════
+     SECTION 2 — TECHNOLOGY STACK
+══════════════════════════════════════════════════ -->
+<h1 id="s2">2. Full Technology Stack</h1>
+
+<h2>Frontend Technologies</h2>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>Technology</th><th>Version</th><th>Purpose</th><th>Where Used</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Next.js</strong></td><td>15.3.0</td><td>React framework — App Router, SSR, SSG</td><td>All frontend pages, layouts, routing</td></tr>
+    <tr><td><strong>React</strong></td><td>19.2.7</td><td>UI component library</td><td>All interactive UI components</td></tr>
+    <tr><td><strong>TypeScript</strong></td><td>5.9.3</td><td>Type-safe JavaScript</td><td>Every file in frontend &amp; API</td></tr>
+    <tr><td><strong>Tailwind CSS</strong></td><td>3.x</td><td>Utility-first CSS framework</td><td>All styling — no separate CSS files</td></tr>
+    <tr><td><strong>TanStack Query v5</strong></td><td>5.x</td><td>Server state management, caching, mutations</td><td>All API data fetching in hooks</td></tr>
+    <tr><td><strong>Zustand</strong></td><td>5.x</td><td>Client state (auth)</td><td><code>store/auth.store.ts</code></td></tr>
+    <tr><td><strong>Axios</strong></td><td>1.x</td><td>HTTP client with interceptors</td><td><code>lib/api.ts</code></td></tr>
+    <tr><td><strong>React Hook Form</strong></td><td>7.x</td><td>Form management, validation</td><td>All forms (register, product, settings)</td></tr>
+    <tr><td><strong>Zod</strong></td><td>3.x</td><td>Schema validation (frontend)</td><td>Form schemas, API response validation</td></tr>
+    <tr><td><strong>Framer Motion</strong></td><td>12.x</td><td>Animations &amp; transitions</td><td>Navbar mobile menu, modals, page transitions</td></tr>
+    <tr><td><strong>Lucide React</strong></td><td>latest</td><td>Icon library (500+ SVG icons)</td><td>All icons in the app</td></tr>
+    <tr><td><strong>Sonner</strong></td><td>latest</td><td>Toast notifications</td><td>Success/error toast messages</td></tr>
+    <tr><td><strong>next-nprogress-bar</strong></td><td>latest</td><td>Page transition progress bar</td><td>Top loading bar on navigation</td></tr>
+    <tr><td><strong>next-themes</strong></td><td>latest</td><td>Dark/light theme toggle</td><td>Theme provider in root layout</td></tr>
+    <tr><td><strong>date-fns</strong></td><td>4.1.0</td><td>Date formatting &amp; calculations</td><td>Notification timestamps, rental dates</td></tr>
+    <tr><td><strong>Fraunces (font)</strong></td><td>—</td><td>Serif display font</td><td>Logo, headings</td></tr>
+    <tr><td><strong>Plus Jakarta Sans</strong></td><td>—</td><td>Sans-serif body font</td><td>All body text</td></tr>
+    <tr><td><strong>JetBrains Mono</strong></td><td>—</td><td>Monospace font</td><td>Code blocks, reference numbers</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h2>Backend Technologies</h2>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>Technology</th><th>Version</th><th>Purpose</th><th>Where Used</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Node.js</strong></td><td>≥20.0.0</td><td>JavaScript runtime</td><td>API server</td></tr>
+    <tr><td><strong>Express.js</strong></td><td>4.x</td><td>HTTP web framework</td><td>All API routes</td></tr>
+    <tr><td><strong>TypeScript</strong></td><td>5.x</td><td>Type safety</td><td>All API source files</td></tr>
+    <tr><td><strong>Prisma ORM</strong></td><td>6.19.3</td><td>Database ORM, migrations, schema</td><td>All DB queries via repositories</td></tr>
+    <tr><td><strong>MySQL</strong></td><td>8.x</td><td>Relational database</td><td>Primary data store (via XAMPP)</td></tr>
+    <tr><td><strong>Redis</strong></td><td>—</td><td>Caching layer</td><td>Category lists, featured products</td></tr>
+    <tr><td><strong>JWT (jsonwebtoken)</strong></td><td>—</td><td>Access &amp; refresh tokens</td><td>Auth middleware, login/logout</td></tr>
+    <tr><td><strong>bcryptjs</strong></td><td>—</td><td>Password hashing</td><td>Register, login, reset password</td></tr>
+    <tr><td><strong>Multer</strong></td><td>—</td><td>Multipart file upload</td><td>Product images, NID photos, return evidence</td></tr>
+    <tr><td><strong>Sharp</strong></td><td>—</td><td>Image processing &amp; resizing</td><td>Uploaded image optimization</td></tr>
+    <tr><td><strong>Zod</strong></td><td>3.x</td><td>Request body/query validation</td><td>All route middleware validators</td></tr>
+    <tr><td><strong>Nodemailer</strong></td><td>—</td><td>Email sending (SMTP)</td><td>Password reset, registration emails</td></tr>
+    <tr><td><strong>Winston</strong></td><td>—</td><td>Logging with daily rotation</td><td>API request &amp; error logs</td></tr>
+    <tr><td><strong>Helmet</strong></td><td>—</td><td>HTTP security headers</td><td>All API responses</td></tr>
+    <tr><td><strong>CORS</strong></td><td>—</td><td>Cross-origin resource sharing</td><td>API ↔ Frontend communication</td></tr>
+    <tr><td><strong>compression</strong></td><td>—</td><td>Gzip response compression</td><td>All API responses</td></tr>
+    <tr><td><strong>cookie-parser</strong></td><td>—</td><td>HTTP cookie handling</td><td>Refresh token cookies</td></tr>
+    <tr><td><strong>express-rate-limit</strong></td><td>—</td><td>Rate limiting (100 req/min)</td><td>All <code>/api/v1</code> routes</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h2>Dev &amp; Build Tools</h2>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>Tool</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td><strong>pnpm</strong> (v9.15.0)</td><td>Fast, disk-efficient package manager. Manages workspaces across all packages.</td></tr>
+    <tr><td><strong>Turborepo</strong></td><td>Monorepo build system. Runs <code>dev</code>, <code>build</code>, <code>lint</code>, <code>test</code> across all packages in parallel with caching.</td></tr>
+    <tr><td><strong>XAMPP</strong></td><td>Local development server. Runs Apache + MySQL on Windows for the database.</td></tr>
+    <tr><td><strong>Prisma Studio</strong></td><td>Visual GUI to browse and edit database tables directly.</td></tr>
+    <tr><td><strong>ESLint</strong></td><td>Code linting — shared config via <code>@lendora/config</code>.</td></tr>
+    <tr><td><strong>GitHub Actions</strong></td><td>CI/CD pipeline in <code>.github/workflows/</code>.</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h2>Payment Gateways</h2>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>Gateway</th><th>Role</th><th>How It Works</th></tr></thead>
+  <tbody>
+    <tr><td><strong>bKash</strong></td><td>Primary mobile payment</td><td>Payment initiated via API → User redirected to bKash → Callback URL returns status → Payment record created</td></tr>
+    <tr><td><strong>Nagad</strong></td><td>Secondary mobile payment</td><td>Same flow as bKash — separate callback endpoint <code>/payments/nagad/callback</code></td></tr>
+    <tr><td><strong>Demo/BKASH</strong></td><td>Development testing</td><td>In dev mode: <code>mark-ready</code> endpoint creates Payment records with <code>DEMO_RENTAL_XXXXXXXX</code> reference, simulating a successful payment</td></tr>
+  </tbody>
+</table>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════
+     SECTION 3 — FOLDER STRUCTURE
+══════════════════════════════════════════════════ -->
+<h1 id="s3">3. Project Folder Structure — Every Folder Explained</h1>
+
+<h2>Root Level</h2>
+<div class="tree">
+<span class="folder">lendora/</span>                          ← Project root (monorepo)<br>
+├── <span class="folder">apps/</span>                         ← Applications<br>
+│   └── <span class="folder">api/</span>                      ← Express backend API<br>
+├── <span class="folder">frontend/</span>                     ← Next.js frontend app<br>
+├── <span class="folder">packages/</span>                     ← Shared code libraries<br>
+│   ├── <span class="folder">config/</span>                   ← ESLint + TypeScript configs<br>
+│   ├── <span class="folder">database/</span>                 ← Prisma schema + migrations<br>
+│   └── <span class="folder">shared/</span>                   ← Types, enums, constants shared by frontend &amp; API<br>
+├── <span class="folder">docs/</span>                         ← Documentation<br>
+├── <span class="folder">nginx/</span>                        ← Nginx config (production proxy)<br>
+├── <span class="folder">scripts/</span>                      ← Utility scripts (seed, backup)<br>
+├── <span class="folder">.github/</span>                      ← GitHub Actions CI/CD<br>
+├── <span class="file">package.json</span>                    ← Root workspace manifest<br>
+├── <span class="file">pnpm-workspace.yaml</span>             ← pnpm workspace config<br>
+└── <span class="file">turbo.json</span>                      ← Turborepo pipeline config<br>
+</div>
+
+<h2>Backend API — <code>apps/api/src/</code></h2>
+<div class="tree">
+<span class="folder">apps/api/src/</span><br>
+├── <span class="folder">interface/</span>                    ← HTTP layer (routes + middleware)<br>
+│   └── <span class="folder">http/</span><br>
+│       ├── <span class="folder">routes/</span>               ← All API endpoint files<br>
+│       │   ├── <span class="file">auth.routes.ts</span>      ← /auth/* — login, register, logout<br>
+│       │   ├── <span class="file">product.routes.ts</span>   ← /products/* — listings<br>
+│       │   ├── <span class="file">rental.routes.ts</span>    ← /rentals/* — booking lifecycle<br>
+│       │   ├── <span class="file">vendor.routes.ts</span>    ← /vendors/* — vendor profiles<br>
+│       │   ├── <span class="file">payment.routes.ts</span>   ← /payments/* — transactions &amp; payouts<br>
+│       │   ├── <span class="file">category.routes.ts</span>  ← /categories/* — product categories<br>
+│       │   ├── <span class="file">review.routes.ts</span>    ← /reviews/* — ratings<br>
+│       │   ├── <span class="file">user.routes.ts</span>      ← /users/* — user management<br>
+│       │   ├── <span class="file">admin.routes.ts</span>     ← /admin/* — all admin operations<br>
+│       │   ├── <span class="file">notification.routes.ts</span> ← /notifications/*<br>
+│       │   └── <span class="file">stats.routes.ts</span>     ← /stats — public platform stats<br>
+│       ├── <span class="folder">middleware/</span>           ← Express middleware<br>
+│       │   ├── <span class="file">authenticate.middleware.ts</span>   ← JWT token verification<br>
+│       │   ├── <span class="file">validate.middleware.ts</span>       ← Zod schema validation<br>
+│       │   ├── <span class="file">upload.middleware.ts</span>         ← Multer + Sharp image upload<br>
+│       │   ├── <span class="file">error-handler.middleware.ts</span>  ← Global error catching<br>
+│       │   └── <span class="file">request-id.middleware.ts</span>     ← Unique request IDs for logging<br>
+│       └── <span class="file">app.ts</span>                  ← Express app factory (all routes registered here)<br>
+├── <span class="folder">application/</span>                  ← Business logic layer<br>
+│   ├── <span class="folder">use-cases/</span>                ← One file = one business action<br>
+│   │   ├── <span class="folder">auth/</span>                 ← Register, Login, Logout, RefreshToken, ForgotPassword, ResetPassword<br>
+│   │   ├── <span class="folder">rental/</span>               ← CreateRental, ConfirmRental, CancelRental, InitiateReturn, ConfirmReturn<br>
+│   │   ├── <span class="folder">product/</span>              ← CreateProduct, UpdateProduct, DeleteProduct<br>
+│   │   ├── <span class="folder">payment/</span>              ← InitiatePayment, HandleCallback, ReleaseDeposit, ProcessVendorPayout<br>
+│   │   ├── <span class="folder">vendor/</span>               ← ApplyToBeVendor<br>
+│   │   ├── <span class="folder">review/</span>               ← CreateReview<br>
+│   │   └── <span class="folder">dispute/</span>              ← OpenDispute<br>
+│   ├── <span class="folder">dtos/</span>                     ← Data Transfer Objects (request/response shapes)<br>
+│   └── <span class="folder">ports/</span>                    ← Repository + service interfaces<br>
+├── <span class="folder">domain/</span>                       ← Pure business rules (no DB, no HTTP)<br>
+│   ├── <span class="folder">entities/</span>                 ← User, Product, Rental domain objects<br>
+│   ├── <span class="folder">value-objects/</span>            ← Money, Email, PhoneNumber<br>
+│   ├── <span class="folder">errors/</span>                   ← Custom business exceptions<br>
+│   └── <span class="folder">events/</span>                   ← Domain events (RentalCompleted, PaymentReceived)<br>
+├── <span class="folder">infrastructure/</span>               ← External systems integration<br>
+│   ├── <span class="folder">database/</span>                 ← Prisma client + repositories<br>
+│   │   └── <span class="folder">repositories/</span>         ← 8 repositories (user, product, rental, vendor, payment, review, dispute, category)<br>
+│   ├── <span class="folder">auth/</span>                     ← JWT generation, bcrypt hashing<br>
+│   ├── <span class="folder">cache/</span>                    ← Redis caching service<br>
+│   ├── <span class="folder">payment/</span>                  ← bKash &amp; Nagad payment SDKs<br>
+│   ├── <span class="folder">email/</span>                    ← Nodemailer email service<br>
+│   ├── <span class="folder">storage/</span>                  ← File upload service (disk storage)<br>
+│   ├── <span class="folder">logger/</span>                   ← Winston logging<br>
+│   ├── <span class="folder">events/</span>                   ← Event bus implementation<br>
+│   └── <span class="folder">container/</span>               ← Dependency injection container<br>
+└── <span class="folder">utils/</span>                        ← Helpers<br>
+    ├── <span class="file">notify.ts</span>                   ← Creates DB notification records<br>
+    └── <span class="file">rental.utils.ts</span>             ← Auto-complete expired rentals<br>
+</div>
+
+<h2>Frontend — <code>frontend/</code></h2>
+<div class="tree">
+<span class="folder">frontend/</span><br>
+├── <span class="folder">app/</span>                          ← Next.js App Router (URL structure)<br>
+│   ├── <span class="folder">(auth)/</span>                   ← Public auth pages (no navbar)<br>
+│   │   ├── <span class="folder">login/</span>                ← /login<br>
+│   │   ├── <span class="folder">register/</span>             ← /register<br>
+│   │   ├── <span class="folder">forgot-password/</span>      ← /forgot-password<br>
+│   │   └── <span class="folder">reset-password/</span>       ← /reset-password<br>
+│   ├── <span class="folder">(marketplace)/</span>            ← Public storefront (with Navbar + Footer)<br>
+│   │   ├── <span class="folder">page.tsx</span>              ← / (homepage)<br>
+│   │   ├── <span class="folder">products/</span>             ← /products and /products/[slug]<br>
+│   │   ├── <span class="folder">rentals/</span>              ← /rentals (my rentals list), /rentals/[id] (detail), /rentals/[id]/pay<br>
+│   │   ├── <span class="folder">rent/</span>                 ← /rent/[productId] (booking flow)<br>
+│   │   ├── <span class="folder">vendors/</span>              ← /vendors (browse sellers)<br>
+│   │   └── <span class="folder">terms, privacy, cookies/</span> ← Legal pages<br>
+│   ├── <span class="folder">(dashboard)/</span>              ← Authenticated dashboards<br>
+│   │   ├── <span class="folder">admin/</span>                ← /admin/* (admin panel)<br>
+│   │   ├── <span class="folder">vendor/</span>               ← /vendor/* (vendor dashboard)<br>
+│   │   └── <span class="folder">customer/</span>             ← /customer (customer dashboard)<br>
+│   └── <span class="file">layout.tsx</span>                  ← Root layout (theme + query + progress bar + toasts)<br>
+├── <span class="folder">components/</span>                   ← Reusable UI components<br>
+│   ├── <span class="folder">home/</span>                     ← Homepage sections (Hero, Categories, HowItWorks, Benefits, etc.)<br>
+│   ├── <span class="folder">shared/</span>                   ← Navbar, VendorNavbar, NotificationBell, ProtectedRoute<br>
+│   ├── <span class="folder">ui/</span>                       ← Primitive UI (buttons, inputs, modals, tabs)<br>
+│   └── <span class="folder">providers/</span>                ← QueryProvider, ProgressBarProvider<br>
+├── <span class="folder">lib/</span>                          ← Client utilities<br>
+│   ├── <span class="file">api.ts</span>                      ← Axios instance (auto token refresh)<br>
+│   ├── <span class="file">query-client.ts</span>             ← TanStack Query config<br>
+│   ├── <span class="file">utils.ts</span>                    ← cn(), formatBDT(), helpers<br>
+│   ├── <span class="file">fonts.ts</span>                    ← Google Font configs<br>
+│   └── <span class="folder">hooks/</span>                    ← All TanStack Query hooks<br>
+│       ├── <span class="file">use-rentals.ts</span>          ← Rental CRUD + lifecycle actions<br>
+│       ├── <span class="file">use-products.ts</span>         ← Product listing + search<br>
+│       ├── <span class="file">use-admin.ts</span>            ← All admin panel queries (865 lines)<br>
+│       ├── <span class="file">use-notifications.ts</span>    ← Notification bell (polls every 30s)<br>
+│       ├── <span class="file">use-payments.ts</span>         ← Payout data<br>
+│       ├── <span class="file">use-categories.ts</span>       ← Category tree<br>
+│       ├── <span class="file">use-reviews.ts</span>          ← Review queries<br>
+│       └── <span class="file">use-stats.ts</span>            ← Platform stats<br>
+├── <span class="folder">store/</span>                        ← Zustand stores<br>
+│   └── <span class="file">auth.store.ts</span>               ← User session, login/logout (persisted in localStorage)<br>
+└── <span class="folder">data/</span>                         ← Static data (homeData.ts, categories, etc.)<br>
+</div>
+
+<h2>Shared Packages — <code>packages/</code></h2>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>Package</th><th>Path</th><th>Exports</th><th>Used By</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>@lendora/shared</code></td>
+      <td><code>packages/shared/</code></td>
+      <td>Types, Enums, Zod schemas, Constants. Shared type definitions for User, Product, Rental, Payment, Review.</td>
+      <td>Both <code>apps/api</code> and <code>frontend</code></td>
+    </tr>
+    <tr>
+      <td><code>@lendora/database</code></td>
+      <td><code>packages/database/</code></td>
+      <td>Prisma schema (<code>schema.prisma</code>), generated Prisma Client, migration files</td>
+      <td><code>apps/api</code></td>
+    </tr>
+    <tr>
+      <td><code>@lendora/config</code></td>
+      <td><code>packages/config/</code></td>
+      <td>Shared ESLint configs, shared TypeScript configs (base, nextjs, node)</td>
+      <td>All packages</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════
+     SECTION 4 — FRONTEND PAGES & TOOLS
+══════════════════════════════════════════════════ -->
+<h1 id="s4">4. Frontend: Pages, Sections &amp; Which Tools Build Them</h1>
+
+<h2>Homepage (<code>/</code>)</h2>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>Section</th><th>Component File</th><th>Tools Used</th><th>Data Source</th></tr></thead>
+  <tbody>
+    <tr><td>Hero Banner</td><td><code>components/home/HeroSection.tsx</code></td><td>Next.js, Tailwind, Framer Motion, Lucide</td><td>Static — no API</td></tr>
+    <tr><td>Browse by Category</td><td><code>components/home/Categories.tsx</code></td><td>Next.js, TanStack Query, Tailwind</td><td><code>GET /categories</code> (Redis-cached)</td></tr>
+    <tr><td>How It Works</td><td><code>components/home/HowItWorks.tsx</code></td><td>Next.js, Tailwind, Lucide</td><td>Static — <code>data/homeData.ts</code></td></tr>
+    <tr><td>Featured Rentals</td><td><code>components/home/FeaturedRentals.tsx</code></td><td>Next.js, TanStack Query, Tailwind</td><td><code>GET /products/featured</code> (Redis-cached)</td></tr>
+    <tr><td>Benefits for Vendors</td><td><code>components/home/Benefits.tsx</code></td><td>Next.js, Tailwind, Lucide</td><td>Static — <code>data/homeData.ts</code></td></tr>
+    <tr><td>Latest Products</td><td><code>components/home/LatestProducts.tsx</code></td><td>TanStack Query, Tailwind</td><td><code>GET /products/recent</code></td></tr>
+    <tr><td>Top Sellers</td><td><code>components/home/TopSellers.tsx</code></td><td>TanStack Query, Tailwind</td><td><code>GET /vendors/top</code></td></tr>
+    <tr><td>Testimonials</td><td><code>components/home/Testimonials.tsx</code></td><td>Tailwind, Framer Motion</td><td>Static</td></tr>
+    <tr><td>FAQ</td><td><code>components/home/FAQ.tsx</code></td><td>Tailwind, Radix Accordion</td><td>Static</td></tr>
+    <tr><td>Newsletter</td><td><code>components/home/Newsletter.tsx</code></td><td>React Hook Form, Tailwind</td><td>Static (form only)</td></tr>
+    <tr><td>Footer</td><td><code>components/home/Footer.tsx</code></td><td>Next.js Link, Tailwind</td><td>Static</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h2>Product Listing (<code>/products</code>)</h2>
+<p><strong>File:</strong> <code>frontend/app/(marketplace)/products/page.tsx</code></p>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>Feature</th><th>Tool</th></tr></thead>
+  <tbody>
+    <tr><td>Product grid with infinite/paginated results</td><td>TanStack Query — <code>use-products.ts</code></td></tr>
+    <tr><td>Search by name</td><td>URL query params + <code>GET /products?search=...</code></td></tr>
+    <tr><td>Filter by category, district, price, condition</td><td>URL params → Zod-validated API query</td></tr>
+    <tr><td>Product cards with images</td><td>Next.js <code>&lt;Image&gt;</code>, Tailwind</td></tr>
+    <tr><td>Wishlist toggle</td><td>TanStack Mutation → <code>PATCH /products/:id/wishlist</code></td></tr>
+  </tbody>
+</table>
+</div>
+
+<h2>Product Detail (<code>/products/[slug]</code>)</h2>
+<p>Shows full product info, pricing, vendor info, availability calendar, reviews. Uses <code>GET /products/:id</code> and <code>GET /products/:id/availability</code>.</p>
+
+<h2>Booking Flow (<code>/rent/[productId]</code>)</h2>
+<p>Multi-step rental booking: date selection → address → confirmation. Calls <code>POST /rentals</code>. Uses React Hook Form + Zod validation + TanStack Mutation.</p>
+
+<h2>My Rentals (<code>/rentals</code> and <code>/rentals/[id]</code>)</h2>
+<p>Lists all customer/vendor rentals. Detail page shows full lifecycle with action buttons (confirm, pay, dispatch, return). Calls rental endpoints via <code>use-rentals.ts</code> hooks.</p>
+
+<h2>Auth Pages</h2>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>Page</th><th>URL</th><th>Tools</th></tr></thead>
+  <tbody>
+    <tr><td>Login</td><td><code>/login</code></td><td>React Hook Form, Zod, Zustand auth store, Axios</td></tr>
+    <tr><td>Register (Customer/Vendor)</td><td><code>/register</code></td><td>React Hook Form, Zod, Multer (NID upload), multipart form</td></tr>
+    <tr><td>Forgot Password</td><td><code>/forgot-password</code></td><td>React Hook Form, Nodemailer (server-side)</td></tr>
+    <tr><td>Reset Password</td><td><code>/reset-password</code></td><td>React Hook Form, token from URL query param</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h2>Navigation Bar</h2>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>Component</th><th>Shown To</th><th>Features</th></tr></thead>
+  <tbody>
+    <tr><td><code>Navbar.tsx</code></td><td>Public + Customers</td><td>Logo, Browse Items, How It Works, Become a Vendor, My Rentals (customer only), Contact, NotificationBell (customer), User dropdown</td></tr>
+    <tr><td><code>VendorNavbar.tsx</code></td><td>Vendors</td><td>Logo, Overview, Listings, Rentals, Payouts, New Listing button, NotificationBell, User dropdown</td></tr>
+    <tr><td>Admin sidebar</td><td>Admins</td><td>Full sidebar nav (16 sections), NotificationBell in top bar</td></tr>
+  </tbody>
+</table>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════
+     SECTION 5 — API ENDPOINTS
+══════════════════════════════════════════════════ -->
+<h1 id="s5">5. Backend: All API Endpoints</h1>
+
+<div class="info-box blue">
+  <strong>Base URL:</strong> <code>http://localhost:4000/api/v1</code> — all endpoints below are relative to this base. <strong>Auth required</strong> = needs <code>Authorization: Bearer &lt;token&gt;</code> header.
+</div>
+
+<h2>Authentication — <code>/auth</code></h2>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>Method</th><th>Endpoint</th><th>Auth?</th><th>Description</th></tr></thead>
+  <tbody>
+    <tr><td><span class="badge badge-green">POST</span></td><td><code>/auth/register</code></td><td>No</td><td>Standard registration (email, password, name, phone)</td></tr>
+    <tr><td><span class="badge badge-green">POST</span></td><td><code>/auth/register/vendor</code></td><td>No</td><td>Vendor registration with NID documents (multipart)</td></tr>
+    <tr><td><span class="badge badge-green">POST</span></td><td><code>/auth/register/customer</code></td><td>No</td><td>Customer registration with NID photo (multipart)</td></tr>
+    <tr><td><span class="badge badge-green">POST</span></td><td><code>/auth/login</code></td><td>No</td><td>Login → returns accessToken (JWT) + sets refreshToken cookie</td></tr>
+    <tr><td><span class="badge badge-green">POST</span></td><td><code>/auth/refresh</code></td><td>Cookie</td><td>Use refresh token cookie → get new access token</td></tr>
+    <tr><td><span class="badge badge-green">POST</span></td><td><code>/auth/logout</code></td><td>Yes</td><td>Clears refresh token from DB + cookie</td></tr>
+    <tr><td><span class="badge badge-green">POST</span></td><td><code>/auth/forgot-password</code></td><td>No</td><td>Sends password reset email</td></tr>
+    <tr><td><span class="badge badge-green">POST</span></td><td><code>/auth/reset-password</code></td><td>No</td><td>Resets password with reset token</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h2>Rentals — <code>/rentals</code></h2>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>Method</th><th>Endpoint</th><th>Role</th><th>Description</th></tr></thead>
+  <tbody>
+    <tr><td><span class="badge badge-green">POST</span></td><td><code>/rentals</code></td><td>Customer</td><td>Create rental request → status: PENDING_CONFIRMATION</td></tr>
+    <tr><td><span class="badge badge-blue">GET</span></td><td><code>/rentals</code></td><td>Any auth</td><td>List own rentals (vendor sees their listings, customer sees bookings)</td></tr>
+    <tr><td><span class="badge badge-blue">GET</span></td><td><code>/rentals/:id</code></td><td>Owner/Admin</td><td>Full rental details including return record</td></tr>
+    <tr><td><span class="badge badge-blue">GET</span></td><td><code>/rentals/:id/renter-info</code></td><td>Vendor/Admin</td><td>Renter's name, phone, address for vendor review</td></tr>
+    <tr><td><span class="badge badge-green">POST</span></td><td><code>/rentals/:id/confirm</code></td><td>Vendor/Admin</td><td>Vendor confirms booking → CONFIRMED</td></tr>
+    <tr><td><span class="badge badge-green">POST</span></td><td><code>/rentals/:id/cancel</code></td><td>Any auth</td><td>Cancel with reason (RENTER_REQUEST, VENDOR_UNAVAILABLE, etc.)</td></tr>
+    <tr><td><span class="badge badge-green">POST</span></td><td><code>/rentals/:id/mark-ready</code></td><td>Customer</td><td>Customer pays → READY_FOR_PICKUP. Creates Payment + VendorPayout records.</td></tr>
+    <tr><td><span class="badge badge-green">POST</span></td><td><code>/rentals/:id/dispatch</code></td><td>Vendor/Admin</td><td>Vendor dispatches item → ACTIVE</td></tr>
+    <tr><td><span class="badge badge-green">POST</span></td><td><code>/rentals/:id/extend</code></td><td>Vendor/Admin</td><td>Extend rental end date (recalculates fees)</td></tr>
+    <tr><td><span class="badge badge-green">POST</span></td><td><code>/rentals/:id/initiate-return</code></td><td>Customer</td><td>Customer requests return → RETURN_INITIATED</td></tr>
+    <tr><td><span class="badge badge-green">POST</span></td><td><code>/rentals/:id/confirm-return</code></td><td>Vendor</td><td>Vendor confirms return with condition + damage photos → COMPLETED</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h2>Payments — <code>/payments</code></h2>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>Method</th><th>Endpoint</th><th>Role</th><th>Description</th></tr></thead>
+  <tbody>
+    <tr><td><span class="badge badge-green">POST</span></td><td><code>/payments/initiate</code></td><td>Customer</td><td>Initiate bKash/Nagad payment for a rental</td></tr>
+    <tr><td><span class="badge badge-blue">GET</span></td><td><code>/payments/bkash/callback</code></td><td>Gateway</td><td>bKash redirect callback — verifies payment, redirects to frontend</td></tr>
+    <tr><td><span class="badge badge-blue">GET</span></td><td><code>/payments/nagad/callback</code></td><td>Gateway</td><td>Nagad redirect callback</td></tr>
+    <tr><td><span class="badge badge-blue">GET</span></td><td><code>/payments/rental/:id</code></td><td>Auth</td><td>All payments for a rental (rental fee + deposit)</td></tr>
+    <tr><td><span class="badge badge-green">POST</span></td><td><code>/payments/rental/:id/release-deposit</code></td><td>Admin</td><td>Release deposit back to customer after return</td></tr>
+    <tr><td><span class="badge badge-green">POST</span></td><td><code>/payments/payouts/process</code></td><td>Admin</td><td>Process vendor payout (mark as COMPLETED)</td></tr>
+    <tr><td><span class="badge badge-blue">GET</span></td><td><code>/payments/payouts</code></td><td>Admin/Vendor</td><td>List vendor payouts</td></tr>
+    <tr><td><span class="badge badge-blue">GET</span></td><td><code>/payments/my</code></td><td>Auth</td><td>Payment history for current user</td></tr>
+  </tbody>
+</table>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════
+     SECTION 6 — DATABASE
+══════════════════════════════════════════════════ -->
+<h1 id="s6">6. Database: All Tables &amp; Relationships</h1>
+
+<div class="info-box orange">
+  <strong>Database:</strong> MySQL 8 via XAMPP. ORM: Prisma 6.19.3. All IDs are CUIDs (collision-resistant unique IDs). Prisma handles migrations via <code>packages/database/prisma/schema.prisma</code>.
+</div>
+
+<h2>All Database Tables</h2>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>#</th><th>Table Name</th><th>Model Name</th><th>Purpose</th><th>Key Fields</th></tr></thead>
+  <tbody>
+    <tr><td>1</td><td><code>users</code></td><td>User</td><td>All user accounts (customer, vendor, admin)</td><td>id, email, phone, role, status, nidNumber</td></tr>
+    <tr><td>2</td><td><code>vendor_profiles</code></td><td>VendorProfile</td><td>Extended vendor info, earnings, rating</td><td>id, userId, businessName, status, totalEarnings, averageRating</td></tr>
+    <tr><td>3</td><td><code>verification_documents</code></td><td>VerificationDocument</td><td>Uploaded NID / passport documents</td><td>id, userId, type, documentNumber, fileUrl, verifiedAt</td></tr>
+    <tr><td>4</td><td><code>categories</code></td><td>Category</td><td>Product categories (hierarchical, parent/child)</td><td>id, name, slug, parentId, emoji, isActive</td></tr>
+    <tr><td>5</td><td><code>products</code></td><td>Product</td><td>Rental listings by vendors</td><td>id, vendorId, categoryId, name, pricePerDay, depositAmount, status</td></tr>
+    <tr><td>6</td><td><code>product_media</code></td><td>ProductMedia</td><td>Product images (up to 12 per product)</td><td>id, productId, url, isPrimary, sortOrder</td></tr>
+    <tr><td>7</td><td><code>product_blocked_dates</code></td><td>ProductBlockedDate</td><td>Dates when product is unavailable</td><td>id, productId, date</td></tr>
+    <tr><td>8</td><td><code>rentals</code></td><td>Rental</td><td>Central rental records — the core table</td><td>id, productId, renterId, vendorId, status, startDate, endDate, totalAmount, depositStatus</td></tr>
+    <tr><td>9</td><td><code>return_records</code></td><td>ReturnRecord</td><td>Return condition + damage assessment</td><td>id, rentalId, condition, damageAmount, depositDeduction, adminReviewRequired</td></tr>
+    <tr><td>10</td><td><code>return_evidence</code></td><td>ReturnEvidence</td><td>Photo evidence uploaded during return</td><td>id, returnRecordId, fileUrl, type, uploadedBy</td></tr>
+    <tr><td>11</td><td><code>payments</code></td><td>Payment</td><td>Financial transactions (rental fee, deposit)</td><td>id, rentalId, payerId, type, amount, method, status, externalReference</td></tr>
+    <tr><td>12</td><td><code>vendor_payouts</code></td><td>VendorPayout</td><td>Vendor earnings payouts</td><td>id, vendorId, rentalId, amount, status, transactionRef, processedAt</td></tr>
+    <tr><td>13</td><td><code>reviews</code></td><td>Review</td><td>Customer reviews on products</td><td>id, rentalId, reviewerId, productId, rating, title, body</td></tr>
+    <tr><td>14</td><td><code>vendor_feedback</code></td><td>VendorFeedback</td><td>Vendor's rating of customer</td><td>id, rentalId, vendorId, customerId, rating, comment</td></tr>
+    <tr><td>15</td><td><code>disputes</code></td><td>Dispute</td><td>Rental disputes (damage, no-show, etc.)</td><td>id, rentalId, type, status, depositDeduction, resolution</td></tr>
+    <tr><td>16</td><td><code>dispute_evidence</code></td><td>DisputeEvidence</td><td>Evidence photos for disputes</td><td>id, disputeId, fileUrl, uploadedBy</td></tr>
+    <tr><td>17</td><td><code>notifications</code></td><td>Notification</td><td>In-app notifications for all users</td><td>id, userId, type, title, body, data, readAt</td></tr>
+    <tr><td>18</td><td><code>wishlists</code></td><td>Wishlist</td><td>Customer saved products</td><td>userId + productId (composite key)</td></tr>
+    <tr><td>19</td><td><code>messages</code></td><td>Message</td><td>Rental-specific messages between renter &amp; vendor</td><td>id, rentalId, senderId, body, readAt</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h2>Database Enums</h2>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>Enum Name</th><th>Values</th><th>Used In</th></tr></thead>
+  <tbody>
+    <tr><td><code>UserRole</code></td><td>CUSTOMER, VENDOR, ADMIN, SUPER_ADMIN</td><td>User.role</td></tr>
+    <tr><td><code>UserStatus</code></td><td>ACTIVE, INACTIVE, EMAIL_UNVERIFIED, PHONE_UNVERIFIED, SUSPENDED, BANNED, PENDING_VERIFICATION</td><td>User.status</td></tr>
+    <tr><td><code>VendorStatus</code></td><td>PENDING_VERIFICATION, ACTIVE, SUSPENDED, BANNED</td><td>VendorProfile.status</td></tr>
+    <tr><td><code>ProductStatus</code></td><td>PENDING_REVIEW, ACTIVE, INACTIVE, UNDER_MAINTENANCE, REJECTED, DELETED</td><td>Product.status</td></tr>
+    <tr><td><code>RentalStatus</code></td><td>PENDING_CONFIRMATION, CONFIRMED, READY_FOR_PICKUP, ACTIVE, RETURN_INITIATED, RETURN_IN_TRANSIT, RETURN_RECEIVED, DEPOSIT_PROCESSING, COMPLETED, CANCELLED</td><td>Rental.status</td></tr>
+    <tr><td><code>DepositStatus</code></td><td>HELD, PARTIAL_REFUND_PENDING, FULL_REFUND_PENDING, PARTIALLY_REFUNDED, FULLY_REFUNDED, FORFEITED</td><td>Rental.depositStatus</td></tr>
+    <tr><td><code>PaymentStatus</code></td><td>PENDING, PROCESSING, COMPLETED, FAILED, REFUNDED, PARTIALLY_REFUNDED, CANCELLED</td><td>Payment.status</td></tr>
+    <tr><td><code>PaymentMethod</code></td><td>BKASH, NAGAD, ROCKET, CARD, BANK, CASH</td><td>Payment.method, VendorPayout.method</td></tr>
+    <tr><td><code>PaymentType</code></td><td>RENTAL_PAYMENT, DEPOSIT, DEPOSIT_REFUND, VENDOR_PAYOUT, DAMAGE_DEDUCTION, PLATFORM_FEE</td><td>Payment.type</td></tr>
+    <tr><td><code>DisputeStatus</code></td><td>OPEN, UNDER_REVIEW, AWAITING_EVIDENCE, RESOLVED_RENTER, RESOLVED_VENDOR, ESCALATED, CLOSED</td><td>Dispute.status</td></tr>
+    <tr><td><code>DisputeType</code></td><td>DAMAGE_CLAIM, ITEM_NOT_RETURNED, ITEM_NOT_AS_DESCRIBED, DEPOSIT_DISPUTE, PAYMENT_DISPUTE, VENDOR_NO_SHOW, OTHER</td><td>Dispute.type</td></tr>
+    <tr><td><code>NotificationType</code></td><td>BOOKING_CONFIRMED, BOOKING_CANCELLED, RENTAL_STARTED, RETURN_REQUESTED, RETURN_CONFIRMED, DEPOSIT_REFUNDED, DEPOSIT_DEDUCTED, NEW_REVIEW, DISPUTE_OPENED, DISPUTE_RESOLVED, PAYMENT_RECEIVED, PAYOUT_PROCESSED, VENDOR_APPROVED, VENDOR_SUSPENDED, MESSAGE_RECEIVED</td><td>Notification.type</td></tr>
+  </tbody>
+</table>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════
+     SECTION 7 — RENTAL LIFECYCLE
+══════════════════════════════════════════════════ -->
+<h1 id="s7">7. Rental Lifecycle Flow</h1>
+
+<div class="flow">
+  <div class="flow-step">1. PENDING_CONFIRMATION</div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-step">2. CONFIRMED</div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-step">3. READY_FOR_PICKUP</div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-step">4. ACTIVE</div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-step">5. RETURN_INITIATED</div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-step">6. COMPLETED</div>
+</div>
+
+<div class="table-wrap">
+<table>
+  <thead><tr><th>Stage</th><th>Status</th><th>Who Acts</th><th>API Call</th><th>What Happens in DB</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td><code>PENDING_CONFIRMATION</code></td>
+      <td>Customer creates booking</td>
+      <td><code>POST /rentals</code></td>
+      <td>Rental row created. Vendor receives notification.</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td><code>CONFIRMED</code></td>
+      <td>Vendor approves</td>
+      <td><code>POST /rentals/:id/confirm</code></td>
+      <td>Status updated. Customer receives notification.</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td><code>READY_FOR_PICKUP</code></td>
+      <td>Customer pays</td>
+      <td><code>POST /rentals/:id/mark-ready</code></td>
+      <td>Payment records created (RENTAL_PAYMENT + DEPOSIT). VendorPayout record created as PENDING. Vendor notified.</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td><code>ACTIVE</code></td>
+      <td>Vendor dispatches</td>
+      <td><code>POST /rentals/:id/dispatch</code></td>
+      <td>Status updated. Rental period begins. Customer notified.</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td><code>RETURN_INITIATED</code></td>
+      <td>Customer requests return</td>
+      <td><code>POST /rentals/:id/initiate-return</code></td>
+      <td>Status updated. Vendor notified.</td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td><code>COMPLETED</code></td>
+      <td>Vendor confirms return</td>
+      <td><code>POST /rentals/:id/confirm-return</code></td>
+      <td>ReturnRecord created. If no damage: VendorPayout upgraded from PENDING → COMPLETED. VendorProfile.totalEarnings incremented. Customer notified.</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<div class="info-box orange">
+  <strong>Auto-completion:</strong> A background utility (<code>utils/rental.utils.ts</code> → <code>autoCompleteExpiredRentals()</code>) runs every time <code>GET /rentals</code> is called. It automatically moves any <code>ACTIVE</code> rental whose <code>endDate</code> has passed to <code>COMPLETED</code>.
+</div>
+
+<div class="info-box purple">
+  <strong>Damage / Admin Review:</strong> If the vendor marks major damage during <code>confirm-return</code>, <code>ReturnRecord.adminReviewRequired</code> is set to <code>true</code>. The payout is NOT released automatically — admin must review and resolve the damage claim in the admin panel.
+</div>
+
+
+<!-- ═══════════════════════════════════════════════
+     SECTION 8 — PAYMENT, DEPOSIT & COMMISSION
+══════════════════════════════════════════════════ -->
+<h1 id="s8">8. Payment, Deposit &amp; Commission — How They Work</h1>
+
+<h2>Payment Flow</h2>
+
+<div class="table-wrap">
+<table>
+  <thead><tr><th>Step</th><th>Event</th><th>Tool / Code</th><th>DB Change</th></tr></thead>
+  <tbody>
+    <tr><td>1</td><td>Customer clicks "Pay"</td><td>Frontend → <code>POST /payments/initiate</code></td><td>Payment record created with status PENDING</td></tr>
+    <tr><td>2</td><td>Redirected to bKash/Nagad</td><td><code>infrastructure/payment/bkash.ts</code></td><td>—</td></tr>
+    <tr><td>3</td><td>Payment gateway callback</td><td><code>GET /payments/bkash/callback</code></td><td>Payment.status → COMPLETED, externalReference set</td></tr>
+    <tr><td>4</td><td>In dev mode ("Demo Pay")</td><td><code>POST /rentals/:id/mark-ready</code></td><td>Creates RENTAL_PAYMENT + DEPOSIT Payment rows with ref <code>DEMO_RENTAL_XXXXXXXX</code> and <code>DEMO_DEPOSIT_XXXXXXXX</code></td></tr>
+  </tbody>
+</table>
+</div>
+
+<h2>Commission Calculation</h2>
+<div class="info-box green">
+<strong>Formula used at rental creation:</strong>
+<pre><code>rentalFee      = pricePerDay × totalDays
+platformFee    = rentalFee × platformFeeRate   (default: 10% = 0.10)
+vendorPayout   = rentalFee - platformFee
+deliveryFee    = product.deliveryFee (if delivery requested)
+totalAmount    = rentalFee + depositAmount + deliveryFee</code></pre>
+These values are <strong>stored in the rental row</strong> at creation time and never recalculated (except on extend).
+</div>
+
+<div class="table-wrap">
+<table>
+  <thead><tr><th>Calculation</th><th>Formula</th><th>Where Calculated</th><th>Where Stored</th></tr></thead>
+  <tbody>
+    <tr><td>Rental Fee</td><td><code>pricePerDay × totalDays</code></td><td><code>CreateRental</code> use-case</td><td><code>rentals.rentalFee</code></td></tr>
+    <tr><td>Platform Fee (10%)</td><td><code>rentalFee × platformFeeRate</code></td><td><code>CreateRental</code> use-case</td><td><code>rentals.platformFee</code></td></tr>
+    <tr><td>Vendor Payout</td><td><code>rentalFee - platformFee</code></td><td><code>CreateRental</code> use-case</td><td><code>rentals.vendorPayout</code></td></tr>
+    <tr><td>Total Days</td><td><code>(endDate - startDate) / 86400000</code></td><td><code>CreateRental</code> use-case</td><td><code>rentals.totalDays</code></td></tr>
+    <tr><td>Total Amount</td><td><code>rentalFee + depositAmount + deliveryFee</code></td><td><code>CreateRental</code> use-case</td><td><code>rentals.totalAmount</code></td></tr>
+    <tr><td>Late Penalty</td><td><code>lateDays × (pricePerDay × 1.5)</code></td><td><code>confirm-return</code> handler</td><td><code>return_records.latePenalty</code></td></tr>
+    <tr><td>Vendor Earnings</td><td>Sum of completed <code>vendorPayout.amount</code></td><td>On <code>confirm-return</code></td><td><code>vendor_profiles.totalEarnings</code> (incremented)</td></tr>
+    <tr><td>Vendor Average Rating</td><td>Average of all product reviews for vendor</td><td>After review creation</td><td><code>vendor_profiles.averageRating</code></td></tr>
+  </tbody>
+</table>
+</div>
+
+<h2>Deposit System</h2>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>Stage</th><th>Deposit Status</th><th>Description</th></tr></thead>
+  <tbody>
+    <tr><td>Payment completed</td><td><code>HELD</code></td><td>Deposit collected and held</td></tr>
+    <tr><td>Return confirmed (no damage)</td><td><code>FULL_REFUND_PENDING</code></td><td>Admin needs to release</td></tr>
+    <tr><td>Return confirmed (minor damage)</td><td><code>PARTIAL_REFUND_PENDING</code></td><td>Deduction calculated from damage amount</td></tr>
+    <tr><td>Item not returned / major damage</td><td><code>FORFEITED</code></td><td>Customer loses full deposit</td></tr>
+    <tr><td>Admin releases deposit</td><td><code>FULLY_REFUNDED</code> or <code>PARTIALLY_REFUNDED</code></td><td>Admin calls <code>POST /payments/rental/:id/release-deposit</code></td></tr>
+  </tbody>
+</table>
+</div>
+
+<h2>Vendor Payout System</h2>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>Event</th><th>VendorPayout Status</th><th>transactionRef Format</th></tr></thead>
+  <tbody>
+    <tr><td>Customer pays (mark-ready)</td><td><code>PENDING</code></td><td><code>RENTAL_PAYOUT_XXXXXXXX</code></td></tr>
+    <tr><td>Return confirmed (no damage)</td><td><code>COMPLETED</code></td><td>Same ref — record updated</td></tr>
+    <tr><td>Major damage / admin review</td><td>Stays <code>PENDING</code></td><td>Until admin resolves</td></tr>
+  </tbody>
+</table>
+</div>
+
+<div class="info-box blue">
+  <strong>Admin Commissions View:</strong> The admin <code>/admin/commissions</code> page lists all COMPLETED rentals. For each row it shows: Gross (rentalFee), Platform Commission (platformFee), Vendor Payout (vendorPayout). The <code>payoutType()</code> function in the vendor payouts page identifies payout type by reading the <code>transactionRef</code> prefix.
+</div>
+
+
+<!-- ═══════════════════════════════════════════════
+     SECTION 9 — USER ROLES & PERMISSIONS
+══════════════════════════════════════════════════ -->
+<h1 id="s9">9. User Roles &amp; Permissions</h1>
+
+<div class="table-wrap">
+<table>
+  <thead><tr><th>Role</th><th>Registration</th><th>What They Can Do</th><th>What They Cannot Do</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><span class="badge badge-blue">CUSTOMER</span></td>
+      <td>Self-register at <code>/register</code></td>
+      <td>Browse products, create rentals, pay, initiate returns, leave reviews, open disputes, manage wishlist</td>
+      <td>List products, approve users, access admin panel</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-orange">VENDOR</span></td>
+      <td>Vendor registration with NID, pending admin approval</td>
+      <td>Create/edit/delete products, confirm rentals, dispatch items, confirm returns, view payouts, rate customers</td>
+      <td>Access admin panel, create rentals as renter</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-purple">ADMIN</span></td>
+      <td>Created directly in database</td>
+      <td>Everything — approve vendors/products, resolve disputes, manage all users, view all payments, analytics</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-red">SUPER_ADMIN</span></td>
+      <td>Created directly in database</td>
+      <td>All ADMIN permissions + platform settings management</td>
+      <td>—</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<h2>How Authentication Works</h2>
+<div class="info-box green">
+<strong>Token Flow:</strong>
+<ol>
+  <li>User logs in → API returns <strong>accessToken</strong> (short-lived JWT, ~15min) in response body, and sets <strong>refreshToken</strong> (long-lived, ~7 days) in an <code>HttpOnly</code> cookie.</li>
+  <li>Frontend stores accessToken in <strong>sessionStorage</strong> via Zustand auth store.</li>
+  <li>Every API request includes <code>Authorization: Bearer &lt;accessToken&gt;</code>.</li>
+  <li>When accessToken expires → Axios interceptor in <code>lib/api.ts</code> automatically calls <code>POST /auth/refresh</code> using the cookie, gets a new accessToken, and retries the original request.</li>
+  <li>All pending requests during refresh are queued to avoid duplicate refresh calls.</li>
+</ol>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════
+     SECTION 10 — NOTIFICATION SYSTEM
+══════════════════════════════════════════════════ -->
+<h1 id="s10">10. Notification System</h1>
+
+<h2>How It Works</h2>
+<div class="info-box blue">
+  <strong>Architecture:</strong> Polling-based (no WebSockets). Frontend polls <code>GET /notifications</code> every <strong>30 seconds</strong>. No real-time push — simple and reliable.
+</div>
+
+<div class="table-wrap">
+<table>
+  <thead><tr><th>Component</th><th>File</th><th>Role</th></tr></thead>
+  <tbody>
+    <tr><td>DB Model</td><td><code>packages/database/prisma/schema.prisma</code> — <code>Notification</code></td><td>Stores all notifications: userId, type, title, body, data (JSON), readAt</td></tr>
+    <tr><td>Utility</td><td><code>apps/api/src/utils/notify.ts</code></td><td><code>notify(prisma, userId, type, title, body, data?)</code> — creates notification, silently swallows errors so main flow never breaks</td></tr>
+    <tr><td>API Routes</td><td><code>apps/api/src/interface/http/routes/notification.routes.ts</code></td><td>GET /notifications (last 30 + unread count), PATCH /read-all, PATCH /:id/read</td></tr>
+    <tr><td>Frontend Hook</td><td><code>frontend/lib/hooks/use-notifications.ts</code></td><td>useNotifications() polling hook, useMarkAllRead(), useMarkOneRead()</td></tr>
+    <tr><td>Bell Component</td><td><code>frontend/components/shared/NotificationBell.tsx</code></td><td>Bell icon + unread badge (red circle) + dropdown panel with notifications list</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h2>When Notifications Are Created</h2>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>Event</th><th>Who Gets Notified</th><th>Type</th><th>Message</th></tr></thead>
+  <tbody>
+    <tr><td>Customer creates rental</td><td>Vendor</td><td>BOOKING_CONFIRMED</td><td>"New Rental Request — A customer has requested to rent [product]"</td></tr>
+    <tr><td>Vendor confirms rental</td><td>Customer (renter)</td><td>BOOKING_CONFIRMED</td><td>"Rental Confirmed! — Please complete payment to proceed"</td></tr>
+    <tr><td>Customer pays (mark-ready)</td><td>Vendor</td><td>PAYMENT_RECEIVED</td><td>"Payment Received! — Please dispatch the item"</td></tr>
+    <tr><td>Vendor dispatches item</td><td>Customer</td><td>RENTAL_STARTED</td><td>"Item Dispatched! — Your rental period has started"</td></tr>
+    <tr><td>Customer initiates return</td><td>Vendor</td><td>RETURN_REQUESTED</td><td>"Return Requested — Please inspect and confirm the return"</td></tr>
+    <tr><td>Vendor confirms return</td><td>Customer</td><td>RETURN_CONFIRMED</td><td>"Return Confirmed — Your deposit will be processed"</td></tr>
+    <tr><td>Admin approves vendor</td><td>Vendor</td><td>VENDOR_APPROVED</td><td>"Vendor Account Approved!"</td></tr>
+    <tr><td>Admin rejects vendor</td><td>Vendor</td><td>VENDOR_SUSPENDED</td><td>"Vendor Application Rejected"</td></tr>
+    <tr><td>Admin approves product</td><td>Vendor</td><td>VENDOR_APPROVED</td><td>"Product Approved! — [product] is now live"</td></tr>
+    <tr><td>Admin rejects product</td><td>Vendor</td><td>VENDOR_SUSPENDED</td><td>"Product Rejected — please review listing guidelines"</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h2>NotificationBell Component Behavior</h2>
+<ul>
+  <li>Bell icon with red badge showing unread count (max shows "9+")</li>
+  <li>Click → opens dropdown panel with last 30 notifications</li>
+  <li>Unread notifications have an orange dot + bold title + highlighted background</li>
+  <li>Click any notification → marks it as read</li>
+  <li>"Mark all read" button clears all unread at once</li>
+  <li>Timestamps shown as relative time ("2 minutes ago") using <code>date-fns formatDistanceToNow()</code></li>
+  <li>Shown in: Customer Navbar (desktop), VendorNavbar, Admin layout top bar</li>
+  <li>NOT shown to: unauthenticated users</li>
+</ul>
+
+
+<!-- ═══════════════════════════════════════════════
+     SECTION 11 — FILE UPLOADS
+══════════════════════════════════════════════════ -->
+<h1 id="s11">11. File Upload &amp; Image System</h1>
+
+<div class="table-wrap">
+<table>
+  <thead><tr><th>Upload Type</th><th>Route</th><th>Tool</th><th>Max Files</th><th>Storage</th></tr></thead>
+  <tbody>
+    <tr><td>Product images</td><td><code>POST /products</code></td><td>Multer + Sharp</td><td>12 images</td><td>Local disk → <code>/uploads/products/</code></td></tr>
+    <tr><td>Single product image</td><td><code>POST /products/upload-media</code></td><td>Multer</td><td>1 image</td><td>Local disk</td></tr>
+    <tr><td>NID front &amp; back</td><td><code>POST /auth/register/vendor</code></td><td>Multer</td><td>2 images</td><td>Local disk → <code>/uploads/nid/</code></td></tr>
+    <tr><td>User avatar</td><td><code>POST /users/me/avatar</code></td><td>Multer + Sharp</td><td>1 image</td><td>Local disk → <code>/uploads/avatars/</code></td></tr>
+    <tr><td>Return evidence photos</td><td><code>POST /rentals/:id/confirm-return</code></td><td>Multer</td><td>Multiple</td><td>Local disk → <code>/uploads/evidence/</code></td></tr>
+  </tbody>
+</table>
+</div>
+
+<div class="info-box orange">
+  <strong>Image Processing (Sharp):</strong> Uploaded product images are resized and compressed using Sharp before saving to disk. This reduces storage and improves page load speed. Images are served statically via <code>GET /uploads/[filename]</code> — Express serves the uploads directory directly.
+</div>
+
+
+<!-- ═══════════════════════════════════════════════
+     SECTION 12 — AUTHENTICATION & SECURITY
+══════════════════════════════════════════════════ -->
+<h1 id="s12">12. Authentication &amp; Security</h1>
+
+<div class="table-wrap">
+<table>
+  <thead><tr><th>Security Feature</th><th>Tool</th><th>How It Works</th></tr></thead>
+  <tbody>
+    <tr><td>Password hashing</td><td><code>bcryptjs</code></td><td>Passwords hashed with bcrypt before storage. Never stored as plain text.</td></tr>
+    <tr><td>Access token</td><td><code>jsonwebtoken</code></td><td>Short-lived JWT (15 min). Contains userId, role. Sent in Authorization header.</td></tr>
+    <tr><td>Refresh token</td><td><code>jsonwebtoken</code> + <code>cookie-parser</code></td><td>Long-lived JWT (7 days). Stored in HttpOnly cookie. Hash stored in DB for revocation.</td></tr>
+    <tr><td>HTTPS headers</td><td><code>helmet</code></td><td>Sets security headers: X-Frame-Options, X-XSS-Protection, HSTS, etc.</td></tr>
+    <tr><td>CORS</td><td><code>cors</code></td><td>Only allows requests from <code>APP_URL</code> (frontend URL).</td></tr>
+    <tr><td>Rate limiting</td><td><code>express-rate-limit</code></td><td>Max 100 requests per 60 seconds per IP across all API routes.</td></tr>
+    <tr><td>Input validation</td><td><code>Zod</code></td><td>All request bodies, query strings, and URL params are validated with Zod schemas before reaching handlers.</td></tr>
+    <tr><td>Role-based access</td><td><code>authorize()</code> middleware</td><td>Routes can require specific roles: <code>authorize('VENDOR', 'ADMIN')</code>. Returns 403 if role doesn't match.</td></tr>
+    <tr><td>File type validation</td><td><code>Multer</code></td><td>Only image MIME types accepted for uploads. Max file size enforced.</td></tr>
+  </tbody>
+</table>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════
+     SECTION 13 — ADMIN PANEL
+══════════════════════════════════════════════════ -->
+<h1 id="s13">13. Admin Panel — Full Feature Map</h1>
+
+<p><strong>URL prefix:</strong> <code>/admin/*</code> &nbsp;|&nbsp; <strong>Protected by:</strong> <code>ProtectedRoute roles={['ADMIN']}</code> &nbsp;|&nbsp; <strong>Layout:</strong> <code>frontend/app/(dashboard)/admin/layout.tsx</code></p>
+
+<div class="table-wrap">
+<table>
+  <thead><tr><th>Page</th><th>URL</th><th>Features</th><th>API Calls</th></tr></thead>
+  <tbody>
+    <tr><td>Dashboard</td><td><code>/admin</code></td><td>Summary stats: total users, vendors, products, rentals, revenue, pending items. Quick-action cards.</td><td><code>GET /admin/stats</code></td></tr>
+    <tr><td>Customers</td><td><code>/admin/users</code></td><td>List all customers, filter by status (pending/active/suspended), approve or reject accounts.</td><td><code>GET /admin/customers/*</code>, <code>POST /admin/customers/:id/approve</code></td></tr>
+    <tr><td>Customer Detail</td><td><code>/admin/users/:id</code></td><td>Full user profile, rental history, payment history.</td><td><code>GET /admin/customers/:id</code></td></tr>
+    <tr><td>Sellers (Vendors)</td><td><code>/admin/vendors</code></td><td>List vendors by status (pending/active/suspended). Approve or reject applications. View business details.</td><td><code>GET /admin/vendors/*</code>, <code>POST /admin/vendors/:id/approve</code></td></tr>
+    <tr><td>Vendor Detail</td><td><code>/admin/vendors/:id</code></td><td>Business info, NID photos, rental stats, earnings history.</td><td><code>GET /admin/vendors/:id</code></td></tr>
+    <tr><td>Product Approval</td><td><code>/admin/products</code></td><td>Queue of products pending review. Approve (makes ACTIVE) or reject. Filter by status.</td><td><code>GET /admin/products</code>, <code>POST /admin/products/:id/approve</code></td></tr>
+    <tr><td>Categories</td><td><code>/admin/categories</code></td><td>Create/edit/delete categories. Set parent (create hierarchy). Toggle active/inactive. Set emoji &amp; sort order.</td><td><code>GET /admin/categories</code>, <code>POST /admin/categories</code>, <code>PATCH /admin/categories/:id</code></td></tr>
+    <tr><td>Rentals</td><td><code>/admin/rentals</code></td><td>Full rental list with status filter, search by product/renter/vendor.</td><td><code>GET /admin/rentals</code></td></tr>
+    <tr><td>Returns</td><td><code>/admin/returns</code></td><td>All return records. View condition, damage photos, deduction amounts.</td><td><code>GET /admin/returns</code></td></tr>
+    <tr><td>Damage Claims</td><td><code>/admin/damage-claims</code></td><td>Returns that require admin review (major damage). Admin sets late deduction + damage deduction and resolves.</td><td><code>GET /admin/damage-claims</code>, <code>POST /admin/damage-claims/:id/resolve</code></td></tr>
+    <tr><td>Refunds</td><td><code>/admin/refunds</code></td><td>Deposits pending refund. Release deposits back to customers.</td><td><code>GET /admin/deposits</code>, <code>POST /payments/rental/:id/release-deposit</code></td></tr>
+    <tr><td>Payments</td><td><code>/admin/payments</code></td><td>All payment transactions (rental fee + deposit rows). Filter by method, status.</td><td><code>GET /admin/payments</code></td></tr>
+    <tr><td>Commissions</td><td><code>/admin/commissions</code></td><td>Completed rentals showing: Gross Revenue, Platform Commission (10%), Vendor Payout.</td><td><code>GET /admin/commissions</code></td></tr>
+    <tr><td>Disputes</td><td><code>/admin/disputes</code></td><td>All disputes with status. Resolve with notes, deposit deduction.</td><td><code>GET /admin/disputes</code>, <code>POST /admin/disputes/:id/resolve</code></td></tr>
+    <tr><td>Reviews</td><td><code>/admin/reviews</code></td><td>All customer reviews and vendor feedback. Delete inappropriate reviews.</td><td><code>GET /admin/reviews</code>, <code>DELETE /admin/reviews/:id</code></td></tr>
+    <tr><td>Analytics</td><td><code>/admin/analytics</code></td><td>Revenue charts, category breakdown (counts products in root + subcategories), top vendors, rental trends.</td><td><code>GET /admin/analytics</code></td></tr>
+    <tr><td>Settings</td><td><code>/admin/settings</code></td><td>Platform configuration: commission rate, contact info, feature flags.</td><td><code>GET/PATCH /admin/settings</code></td></tr>
+  </tbody>
+</table>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════
+     SECTION 14 — VENDOR DASHBOARD
+══════════════════════════════════════════════════ -->
+<h1 id="s14">14. Vendor Dashboard — Full Feature Map</h1>
+
+<p><strong>URL prefix:</strong> <code>/vendor/*</code> &nbsp;|&nbsp; <strong>Layout:</strong> <code>frontend/app/(dashboard)/vendor/</code> &nbsp;|&nbsp; <strong>Navbar:</strong> <code>VendorNavbar.tsx</code></p>
+
+<div class="table-wrap">
+<table>
+  <thead><tr><th>Page</th><th>URL</th><th>Features</th><th>API Calls</th></tr></thead>
+  <tbody>
+    <tr><td>Overview</td><td><code>/vendor</code></td><td>Stats (active listings, total rentals, earnings, rating). Pending rentals queue. Recent products. First-time setup wizard (business name, bKash, description).</td><td><code>GET /vendors/me/dashboard</code></td></tr>
+    <tr><td>Listings</td><td><code>/vendor/products</code></td><td>All vendor products with status badges. Edit, delete, toggle status.</td><td><code>GET /vendors/me/products</code></td></tr>
+    <tr><td>New Listing</td><td><code>/vendor/products/new</code></td><td>Full product creation form: name, category, pricing (per day/week/month), deposit, delivery, images (up to 12), specifications, district/division.</td><td><code>POST /products</code> (multipart)</td></tr>
+    <tr><td>Edit Listing</td><td><code>/vendor/products/:id/edit</code></td><td>Edit all product fields, manage images.</td><td><code>PATCH /products/:id</code></td></tr>
+    <tr><td>Rentals</td><td><code>/rentals</code></td><td>Shared rentals list (vendor sees their bookings). Confirm, dispatch, confirm-return actions.</td><td><code>GET /rentals</code></td></tr>
+    <tr><td>Payouts</td><td><code>/vendor/payouts</code></td><td>Payout history. Breakdown: Rental Earnings (RENTAL_PAYOUT_*), Deposit Payouts. Summary: Total Gross, Platform Commission, Net Payout.</td><td><code>GET /payments/payouts</code></td></tr>
+    <tr><td>Settings</td><td><code>/vendor/settings</code></td><td>Update business name, description, address, bank/bKash details.</td><td><code>PATCH /vendors/me</code></td></tr>
+  </tbody>
+</table>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════
+     SECTION 15 — CUSTOMER DASHBOARD
+══════════════════════════════════════════════════ -->
+<h1 id="s15">15. Customer Dashboard — Full Feature Map</h1>
+
+<p><strong>URL prefix:</strong> <code>/customer</code> &nbsp;|&nbsp; <strong>Navbar:</strong> <code>Navbar.tsx</code> (with customer-specific items)</p>
+
+<div class="table-wrap">
+<table>
+  <thead><tr><th>Page</th><th>URL</th><th>Features</th><th>API Calls</th></tr></thead>
+  <tbody>
+    <tr><td>Dashboard</td><td><code>/customer</code></td><td>Rental stats (Active, Pending, Completed). Quick links. Recent rentals summary.</td><td>3× <code>GET /rentals?status=...</code></td></tr>
+    <tr><td>My Rentals</td><td><code>/rentals</code></td><td>Full rental list with status filter. Action buttons per status (pay, return request, review).</td><td><code>GET /rentals</code></td></tr>
+    <tr><td>Rental Detail</td><td><code>/rentals/:id</code></td><td>Full timeline, rental amounts, vendor info, return record, payment status. Action buttons relevant to current status.</td><td><code>GET /rentals/:id</code></td></tr>
+    <tr><td>Payment</td><td><code>/rentals/:id/pay</code></td><td>Payment page showing total breakdown (rental fee + deposit + delivery). bKash/Nagad gateway redirect.</td><td><code>POST /payments/initiate</code></td></tr>
+    <tr><td>Account Settings</td><td><code>/customer/settings</code></td><td>Update name, phone, address, avatar, password.</td><td><code>PATCH /users/me</code>, <code>POST /users/me/avatar</code></td></tr>
+  </tbody>
+</table>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════
+     SECTION 16 — CALCULATIONS
+══════════════════════════════════════════════════ -->
+<h1 id="s16">16. How Every Calculation Works</h1>
+
+<h2>Rental Fee Calculation (at booking creation)</h2>
+<pre><code>// In: application/use-cases/rental/create-rental.use-case.ts
+
+const totalDays      = Math.round((endDate - startDate) / 86_400_000)
+const rentalFee      = product.pricePerDay × totalDays
+const platformFeeRate = 0.10  // 10% commission
+const platformFee    = rentalFee × platformFeeRate
+const vendorPayout   = rentalFee - platformFee
+const deliveryFee    = deliveryRequested ? product.deliveryFee : 0
+const totalAmount    = rentalFee + product.depositAmount + deliveryFee</code></pre>
+
+<h2>Extension Recalculation</h2>
+<pre><code>// In: rental.routes.ts — POST /rentals/:id/extend
+
+const newTotalDays    = Math.round((newEndDate - startDate) / 86_400_000)
+const newRentalFee    = pricePerDay × newTotalDays
+const newPlatformFee  = newRentalFee × platformFeeRate
+const newVendorPayout = newRentalFee - newPlatformFee
+const newTotalAmount  = newRentalFee + depositAmount + deliveryFee
+// DB: rental updated with all new amounts</code></pre>
+
+<h2>Deposit Deduction on Return</h2>
+<pre><code>// In: confirm-return handler
+// damageAmount provided by vendor during return confirmation
+
+depositRefund    = max(0, depositAmount - damageAmount)
+depositDeduction = min(depositAmount, damageAmount)
+// Stored in: return_records.depositRefund and .depositDeduction</code></pre>
+
+<h2>Late Return Penalty</h2>
+<pre><code>// In: ConfirmReturnUseCase
+lateDays    = days between expected endDate and actual return date
+latePenalty = lateDays × (pricePerDay × 1.5)   // 150% daily rate
+outstandingDue = max(0, latePenalty - depositAmount)</code></pre>
+
+<h2>Vendor Average Rating</h2>
+<pre><code>// In: review.repository.ts — after each new review
+averageRating = AVG(reviews.rating) WHERE reviews.vendorId = vendorProfile.id
+// Stored in: vendor_profiles.averageRating</code></pre>
+
+<h2>Admin Analytics — Category Counts</h2>
+<pre><code>// In: admin.routes.ts — GET /admin/analytics
+// For each root category, count products in root + ALL subcategories:
+const childIds = cat.children.map(c => c.id)
+const ids      = [cat.id, ...childIds]
+const count    = await prisma.product.count({
+  where: { categoryId: { in: ids }, status: 'ACTIVE' }
+})</code></pre>
+
+
+<!-- ═══════════════════════════════════════════════
+     SECTION 17 — ENVIRONMENT VARIABLES
+══════════════════════════════════════════════════ -->
+<h1 id="s17">17. Environment Variables Reference</h1>
+
+<h2>API (<code>apps/api/.env</code>)</h2>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>Variable</th><th>Purpose</th><th>Example</th></tr></thead>
+  <tbody>
+    <tr><td><code>DATABASE_URL</code></td><td>MySQL connection string for Prisma</td><td><code>mysql://root:@localhost:3306/lendora</code></td></tr>
+    <tr><td><code>JWT_ACCESS_SECRET</code></td><td>Secret for signing access tokens</td><td>Random 64-char string</td></tr>
+    <tr><td><code>JWT_REFRESH_SECRET</code></td><td>Secret for signing refresh tokens</td><td>Random 64-char string</td></tr>
+    <tr><td><code>JWT_ACCESS_EXPIRY</code></td><td>Access token lifetime</td><td><code>15m</code></td></tr>
+    <tr><td><code>JWT_REFRESH_EXPIRY</code></td><td>Refresh token lifetime</td><td><code>7d</code></td></tr>
+    <tr><td><code>COOKIE_SECRET</code></td><td>Cookie signing secret</td><td>Random string</td></tr>
+    <tr><td><code>APP_URL</code></td><td>Frontend URL for CORS</td><td><code>http://localhost:3000</code></td></tr>
+    <tr><td><code>PORT</code></td><td>API server port</td><td><code>4000</code></td></tr>
+    <tr><td><code>UPLOAD_DIR</code></td><td>File upload directory</td><td><code>./uploads</code></td></tr>
+    <tr><td><code>REDIS_URL</code></td><td>Redis connection for caching</td><td><code>redis://localhost:6379</code></td></tr>
+    <tr><td><code>SMTP_HOST</code></td><td>Email server</td><td><code>smtp.gmail.com</code></td></tr>
+    <tr><td><code>SMTP_USER</code></td><td>Email username</td><td>your Gmail address</td></tr>
+    <tr><td><code>SMTP_PASS</code></td><td>Email password/app-password</td><td>Gmail app password</td></tr>
+    <tr><td><code>BKASH_APP_KEY</code></td><td>bKash API credentials</td><td>From bKash developer portal</td></tr>
+    <tr><td><code>BKASH_APP_SECRET</code></td><td>bKash API secret</td><td>From bKash developer portal</td></tr>
+    <tr><td><code>RATE_LIMIT_MAX_REQUESTS</code></td><td>Max requests per window</td><td><code>100</code></td></tr>
+    <tr><td><code>RATE_LIMIT_WINDOW_MS</code></td><td>Rate limit window (ms)</td><td><code>60000</code> (1 min)</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h2>Frontend (<code>frontend/.env.local</code>)</h2>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>Variable</th><th>Purpose</th><th>Example</th></tr></thead>
+  <tbody>
+    <tr><td><code>NEXT_PUBLIC_API_URL</code></td><td>Backend API base URL</td><td><code>http://localhost:4000/api/v1</code></td></tr>
+    <tr><td><code>NEXT_PUBLIC_APP_URL</code></td><td>Frontend public URL</td><td><code>http://localhost:3000</code></td></tr>
+  </tbody>
+</table>
+</div>
+
+<hr class="divider"/>
+
+<!-- Footer -->
+<div style="text-align:center; padding: 32px 0 16px; color: #888; font-size: 0.8rem;">
+  <p><strong style="color:#0A3D2E;">Lendora</strong> — Bangladesh Multi-Vendor Rental Marketplace</p>
+  <p>Generated: June 2026 &nbsp;|&nbsp; Stack: Next.js 15 + Express + Prisma + MySQL + Redis &nbsp;|&nbsp; pnpm Monorepo</p>
+</div>
+
+<!-- Print button (hidden in print) -->
+<div class="no-print" style="position:fixed; bottom:24px; right:24px;">
+  <button onclick="window.print()"
+    style="background:#C87941; color:#fff; border:none; padding:12px 24px; border-radius:8px; font-size:0.9rem; font-weight:700; cursor:pointer; box-shadow:0 4px 16px rgba(200,121,65,0.4);">
+    Save as PDF
+  </button>
+</div>
+
+</body>
+</html>

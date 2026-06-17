@@ -1,0 +1,176 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --radius: 0.75rem;
+  }
+
+  * {
+    @apply border-ink-200 dark:border-surface-raised;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    min-width: 320px;
+  }
+
+  body {
+    overflow-x: hidden;
+  }
+
+  /* Skip-to-content — visible on focus, hidden otherwise */
+  .skip-link {
+    @apply absolute -top-full left-4 z-[200] px-4 py-2 bg-copper text-white text-sm font-semibold
+           rounded-b-xl transition-all duration-150 focus:top-0 focus-visible:top-0;
+  }
+
+  /* Global focus style — copper ring, never remove outline */
+  :focus-visible {
+    outline: 2px solid #C87941;
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  /* Override for round elements */
+  .focus-ring-full:focus-visible {
+    outline-offset: 3px;
+    border-radius: 9999px;
+  }
+
+  ::selection {
+    background-color: rgba(200, 121, 65, 0.2);
+    color: #1C1410;
+  }
+
+  ::-webkit-scrollbar       { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb {
+    background-color: #C5BCB8;
+    border-radius: 9999px;
+  }
+  .dark ::-webkit-scrollbar-thumb { background-color: #3E3430; }
+}
+
+@layer components {
+  .container-page {
+    @apply max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .section-pad {
+    @apply py-16 md:py-24;
+  }
+
+  .section-label {
+    @apply text-xs font-bold tracking-widest uppercase text-copper;
+  }
+
+  .section-title {
+    @apply font-fraunces text-3xl md:text-4xl font-bold tracking-tight
+           text-ink-900 dark:text-ink-100;
+  }
+
+  .section-desc {
+    @apply text-sm md:text-base text-ink-500 dark:text-ink-400 leading-relaxed max-w-xl;
+  }
+
+  /* Buttons — sufficient contrast, visible focus, min 44px touch target */
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 min-h-[44px]
+           bg-copper hover:bg-copper-dark active:scale-[0.98]
+           text-white font-semibold rounded-full px-6 py-2.5 text-sm
+           transition-all duration-150
+           hover:-translate-y-px hover:shadow-copper
+           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-copper
+           focus-visible:ring-offset-2 focus-visible:ring-offset-white
+           dark:focus-visible:ring-offset-surface-base
+           disabled:opacity-50 disabled:pointer-events-none;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 min-h-[44px]
+           border-2 border-copper text-copper active:scale-[0.98]
+           font-semibold rounded-full px-6 py-2.5 text-sm transition-all duration-150
+           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-copper
+           focus-visible:ring-offset-2;
+  }
+  .btn-secondary:hover { background-color: rgba(200, 121, 65, 0.08); }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 min-h-[44px]
+           bg-ink-100 dark:bg-surface-raised
+           hover:bg-ink-200 dark:hover:bg-surface-overlay
+           text-ink-700 dark:text-ink-300 font-semibold
+           rounded-full px-6 py-2.5 text-sm transition-all duration-150
+           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-copper
+           focus-visible:ring-offset-2;
+  }
+
+  /* Cards */
+  .card-base {
+    @apply bg-white dark:bg-surface-base
+           border border-ink-200 dark:border-surface-raised
+           rounded-3xl overflow-hidden transition-all duration-200;
+  }
+
+  .card-hover {
+    @apply hover:border-copper hover:shadow-warm-lg hover:-translate-y-1;
+  }
+
+  /* Typography */
+  .price-tag {
+    @apply font-mono text-copper font-medium;
+  }
+
+  /* Badges */
+  .badge-copper  { @apply text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-copper text-white; }
+  .badge-forest  { @apply text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-forest text-white; }
+  .badge-gold    { @apply text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-gold text-ink-900; }
+  .badge-neutral {
+    @apply text-[10px] font-semibold px-2.5 py-0.5 rounded-full
+           bg-ink-100 dark:bg-surface-raised text-ink-500 dark:text-ink-400;
+  }
+  .badge-success {
+    @apply text-[10px] font-bold px-2.5 py-0.5 rounded-full text-forest-light;
+    background-color: rgba(10, 61, 46, 0.10);
+    border: 1px solid rgba(10, 61, 46, 0.20);
+  }
+
+  /* Skeleton shimmer */
+  .skeleton {
+    @apply relative overflow-hidden bg-ink-100 dark:bg-surface-raised rounded-xl;
+  }
+  .skeleton::after {
+    content: '';
+    @apply absolute inset-0;
+    background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.28) 50%, transparent 100%);
+    background-size: 200% 100%;
+    animation: shimmer 1.8s linear infinite;
+  }
+  .dark .skeleton::after {
+    background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.07) 50%, transparent 100%);
+    background-size: 200% 100%;
+    animation: shimmer 1.8s linear infinite;
+  }
+
+  /* Scrollbar hide utility */
+  .scrollbar-none {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .scrollbar-none::-webkit-scrollbar { display: none; }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+
+/* Reduced motion — respect system preference */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
