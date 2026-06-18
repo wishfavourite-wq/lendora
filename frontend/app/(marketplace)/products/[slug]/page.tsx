@@ -154,8 +154,8 @@ export default function ProductDetailPage() {
             <p className="text-ink-600 leading-relaxed mb-6">{product.description}</p>
 
             {/* Main image */}
-            <div className="aspect-[4/3] relative rounded-2xl overflow-hidden bg-ink-100 mb-3">
-              <img src={primaryImage} alt={product.name} className="w-full h-full object-cover" />
+            <div className="relative rounded-2xl overflow-hidden bg-ink-50 mb-3 flex items-center justify-center" style={{ maxHeight: '360px', height: '360px' }}>
+              <img src={primaryImage} alt={product.name} className="max-h-full max-w-full object-contain" />
               {product.isInstantBooking && (
                 <span className="absolute top-3 left-3 flex items-center gap-1.5 bg-white/90 backdrop-blur-sm text-forest font-semibold text-xs px-3 py-1.5 rounded-full shadow">
                   <Zap size={12} className="text-gold" fill="currentColor" /> Instant Booking
@@ -172,7 +172,7 @@ export default function ProductDetailPage() {
                     onClick={() => setSelectedImage(i)}
                     className={cn('aspect-square relative rounded-xl overflow-hidden', selectedImage === i ? 'ring-2 ring-copper' : 'opacity-70 hover:opacity-100')}
                   >
-                    <img src={m.url} alt={m.altText ?? product.name} className="w-full h-full object-cover" />
+                    <img src={m.url} alt={m.altText ?? product.name} className="w-full h-full object-contain" />
                   </button>
                 ))}
               </div>
