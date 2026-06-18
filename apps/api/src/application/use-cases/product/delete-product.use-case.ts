@@ -40,7 +40,8 @@ export class DeleteProductUseCase {
     }
 
     await this.deps.productRepo.softDelete(productId)
-    await this.deps.cache.delete(`product:${productId}`)
-    await this.deps.cache.delete('products:featured')
+    await this.deps.cache.del(`product:${productId}`)
+    await this.deps.cache.del('products:featured')
+    await this.deps.cache.delPattern('categories:flat:*')
   }
 }

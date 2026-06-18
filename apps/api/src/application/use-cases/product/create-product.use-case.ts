@@ -28,6 +28,7 @@ export class CreateProductUseCase {
     const product = await this.deps.productRepo.create({ ...productData, vendorId: vendor.id }, mediaUrls)
     await this.deps.cache.del('products:featured')
     await this.deps.cache.del('products:recent')
+    await this.deps.cache.delPattern('categories:flat:*')
     return product
   }
 }
